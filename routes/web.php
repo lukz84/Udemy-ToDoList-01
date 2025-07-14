@@ -71,11 +71,9 @@ Route::get('/tasks', function () use ($tasks) {
 Route::get('/tasks/{id}', function ($id) use ($tasks) {
 
     $task = collect($tasks)->firstWhere('id',$id);
-
     if(!$task) {
         abort(Response::HTTP_NOT_FOUND);
     }
-
     return view('show', ['task'=>$task]);
     
 })->name('tasks.show');
@@ -91,6 +89,9 @@ Route::get('/greet/{name}', function ($name) {
 Route::fallback(function () {
     return 'Still got somewhere!';
 });
+
+
+
 
 
 
