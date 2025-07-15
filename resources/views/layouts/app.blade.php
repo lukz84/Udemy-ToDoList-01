@@ -6,7 +6,11 @@
     <title>@yield("title")</title>
 </head>
 <body>
-@yield('content')
-    
+<div>
+    @if (session()->has('success'))
+        <div>{{ session('success') }}</div>
+    @endif
+</div>
+    @yield('content')
 </body>
 </html>
