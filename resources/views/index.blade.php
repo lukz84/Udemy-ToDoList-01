@@ -1,7 +1,11 @@
-<h1>Kurwa to za proste ale robie po koleji</h1>
+@extends('layouts.app')
 
+@section('content')
 
 <div>
+    <a href="{{ route('tasks.create') }}">New Task</a>
+</div>
+<br>
 {{-- @if (count($tasks) > 0) --}}
 @forelse ($tasks as $task )
 <div style="display: flex; align-items: center; gap: 10px;">
@@ -17,4 +21,10 @@
 
 @endforelse
 
-</div>
+@if($tasks->count())
+<nav style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
+    {{ $tasks->links() }}
+</nav>
+@endif
+
+@endsection
