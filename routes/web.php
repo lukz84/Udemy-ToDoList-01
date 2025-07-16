@@ -7,8 +7,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Response;
 
 
-
-
 Route::get('/', function () {
     return redirect()->route('tasks.index');
 });
@@ -32,15 +30,16 @@ Route::get('/greet/{name}', function ($name) {
 
 Route::post('/tasks', function (TaskRequest $request) {
 
-    $data = $request->validated();
-    $task = new Task;
-    $task->title = $data['title'];
-    $task->description = $data['description'];
-    $task->long_description = $data['long_description'];
-    $task->save();
+    // $data = $request->validated();
+    // $task = new Task;
+    // $task->title = $data['title'];
+    // $task->description = $data['description'];
+    // $task->long_description = $data['long_description'];
+    // $task->save();
+    $task = Task::create($request->validated());
 
     //dd($request->all());
-    return redirect()->route('tasks.show',['id'=>$task->id])
+    return redirect()->route('tasks.show',['task'=>$task->id])
             ->with('success','Task created successfully!');
 
 })->name('tasks.store');
@@ -48,16 +47,10 @@ Route::post('/tasks', function (TaskRequest $request) {
 
 Route::put('/tasks/{task}', function (Task $task,TaskRequest $request) {
     
-    
-    $data = $request->validated();
-    $task = new Task;
-    $task->title = $data['title'];
-    $task->description = $data['description'];
-    $task->long_description = $data['long_description'];
-    $task->save();
+    $task->update($request->validated());
 
     //dd($request->all());
-    return redirect()->route('tasks.show',['id'=>$task->id])
+    return redirect()->route('tasks.show',['task'=>$task->id])
             ->with('success','Task edited successfully!');
 
 })->name('tasks.update');
@@ -68,6 +61,12 @@ Route::get('/tasks/{task}/edit', function (Task $task) {
         'task' => $task,
     ]);
 })->name('tasks.edit');
+
+
+Route::delete('/tasks/{task}', function (Task $task) {
+    $task->delete();
+    return redirect()->route('tasks.index')->with('success','Task deleted successfull');        
+})->name('tasks.delete');
 
 // Route::fallback(function () {
 //     return 'Still got somewhere!';
