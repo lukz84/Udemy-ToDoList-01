@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Response;
+
 
 
 
@@ -20,22 +22,17 @@ Route::get('/tasks', function () {
 //
 Route::view('tasks/create','create');
 //
-Route::get('/tasks/{id}', function ($id)  {
-    return view('show', ['task'=> Task::findOrFail($id)]);   
+Route::get('/tasks/{task}', function (Task $task)  {
+    return view('show', ['task'=> $task]);   
 })->name('tasks.show');
 //
 Route::get('/greet/{name}', function ($name) {
     return 'Hello ' . $name . '!';
 });
 
-Route::post('/tasks', function (Request $request) {
-    $data = $request->validate([
-        'title' => 'required|max:255',
-        'description' => 'required',
-        'long_description' => 'required',
+Route::post('/tasks', function (TaskRequest $request) {
 
-    ]);
-
+    $data = $request->validated();
     $task = new Task;
     $task->title = $data['title'];
     $task->description = $data['description'];
@@ -49,15 +46,11 @@ Route::post('/tasks', function (Request $request) {
 })->name('tasks.store');
 
 
-Route::put('/tasks/{id}', function ($id,Request $request) {
-    $data = $request->validate([
-        'title' => 'required|max:255',
-        'description' => 'required',
-        'long_description' => 'required',
-
-    ]);
-
-    $task = Task::findOrFail($id);
+Route::put('/tasks/{task}', function (Task $task,TaskRequest $request) {
+    
+    
+    $data = $request->validated();
+    $task = new Task;
     $task->title = $data['title'];
     $task->description = $data['description'];
     $task->long_description = $data['long_description'];
@@ -70,9 +63,9 @@ Route::put('/tasks/{id}', function ($id,Request $request) {
 })->name('tasks.update');
 
 
-Route::get('/tasks/{id}/edit', function ($id) {
+Route::get('/tasks/{task}/edit', function (Task $task) {
     return view('edit', [
-        'task' => Task::findOrFail($id)
+        'task' => $task,
     ]);
 })->name('tasks.edit');
 
