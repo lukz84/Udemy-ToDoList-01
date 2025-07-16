@@ -2,14 +2,16 @@
 
 @section('content')
 
-<div>
-    <a href="{{ route('tasks.create') }}">New Task</a>
-</div>
-<br>
+<nav class="mb-4">
+    <a href="{{ route('tasks.create') }}" class="font-medium text-gray-700 underline decoration-pink-500">New Task</a>
+</nav>
+
 {{-- @if (count($tasks) > 0) --}}
 @forelse ($tasks as $task )
-<div style="display: flex; align-items: center; gap: 10px;">
-    <a href="{{ route('tasks.show', ['task' => $task->id]) }}">{{ $task->title }}</a>
+<div>
+    <a href="{{ route('tasks.show', ['task' => $task->id]) }}"
+    @class(['font-bold','line-through' => $task->completed])
+    >{{ $task->title }}</a>
     <form method="POST" action="{{ route('tasks.delete', ['task' => $task->id]) }}" style="display:inline;">
         @csrf
         @method('DELETE')
@@ -22,7 +24,7 @@
 @endforelse
 
 @if($tasks->count())
-<nav style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
+<nav class="mt-4">
     {{ $tasks->links() }}
 </nav>
 @endif
